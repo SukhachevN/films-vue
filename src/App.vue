@@ -1,10 +1,22 @@
+<script setup>
+import Header from './components/HeaderComponent.vue';
+</script>
+
 <template>
-    <nav>
-        <router-link to="/discover">Discover</router-link> |
-        <router-link to="/favourite">Favourite</router-link> |
-        <router-link to="/watchLater">WatchLater</router-link>
-    </nav>
-    <router-view />
+    <div class="container">
+        <Header />
+        <main><router-view /></main>
+    </div>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+$maxWidth: 1440px;
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: $maxWidth;
+    margin: auto;
+    flex-direction: column;
+}
+</style>
