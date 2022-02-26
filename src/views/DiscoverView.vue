@@ -1,3 +1,7 @@
+<script setup>
+import SearchLine from '../components/SearchLine.vue';
+</script>
+
 <template>
-    <div>Discover</div>
+    <SearchLine />
 </template>

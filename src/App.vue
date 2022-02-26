@@ -10,13 +10,40 @@ import Header from './components/HeaderComponent.vue';
 </template>
 
 <style lang="scss">
-$maxWidth: 1440px;
+@import './constants.scss';
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+    padding: 0;
+}
+li {
+    list-style: none;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+}
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+        'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
 .container {
     display: flex;
     align-items: center;
     justify-content: center;
     max-width: $maxWidth;
     margin: auto;
+    flex-direction: column;
+}
+
+main {
+    width: 100%;
+    display: flex;
+    align-items: center;
     flex-direction: column;
 }
 </style>
