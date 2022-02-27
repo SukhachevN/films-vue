@@ -42,9 +42,13 @@ body {
     max-width: $maxWidth;
     margin: auto;
     flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    padding: 3rem;
 }
 
 main {
+    height: 100%;
     width: 100%;
     display: flex;
     align-items: center;

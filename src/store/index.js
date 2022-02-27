@@ -7,7 +7,7 @@ export default createStore({
     state: {
         loadingEntities: false,
         error: null,
-        enities: [],
+        entities: [],
         page: 1,
         endOfData: false,
     },
@@ -22,14 +22,14 @@ export default createStore({
             } else {
                 state.page += 1;
             }
-            state.enities = [...state.enities, ...payload];
+            state.entities = [...state.entities, ...payload];
             state.loading = false;
             state.error = false;
         },
         setError(state, payload) {
             state.loading = false;
             state.page = 1;
-            state.enities = [];
+            state.entities = [];
             state.error = payload;
         },
     },
@@ -37,7 +37,7 @@ export default createStore({
         async fetchDiscoverFilms({ state, commit }) {
             fetchFunc({
                 commit,
-                link: `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&sort_by=popularity.desc&page=${state.page}`,
+                link: `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&sort_by=popularity.desc&page=${state.page}&language=vi-VN`,
                 loadingFunc: 'setLoadingEntities',
                 successFunc: 'setEntities',
                 errorFunc: 'setError',

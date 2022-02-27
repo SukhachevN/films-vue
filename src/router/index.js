@@ -3,11 +3,12 @@ import DiscoverView from '../views/DiscoverView.vue';
 import FavouriteView from '../views/FavouriteView.vue';
 import WatchLaterView from '../views/WatchLaterView.vue';
 import NotFoundView from '../views/NotFoundView.vue';
+import FilmView from '../views/FilmView.vue';
 
 const routes = [
     {
         path: '/',
-        component: DiscoverView,
+        redirect: () => ({ path: '/discover' }),
     },
     {
         path: '/discover',
@@ -23,6 +24,11 @@ const routes = [
         path: '/watchLater',
         name: 'watchLater',
         component: WatchLaterView,
+    },
+    {
+        path: '/films/:id',
+        name: 'film',
+        component: FilmView,
     },
     {
         path: '/:catchAll(.*)',
