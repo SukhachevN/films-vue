@@ -1,5 +1,9 @@
 <script setup>
+import { onMounted } from 'vue';
 import Header from './components/HeaderComponent.vue';
+import store from './store';
+
+onMounted(() => store.dispatch('fetchDiscoverFilms'));
 </script>
 
 <template>
