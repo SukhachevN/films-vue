@@ -16,7 +16,7 @@ watch(search, () => console.log(search.value));
             @input="handleSearch"
             type="search"
             id="search"
-            placeholder="Viết tên của phim..."
+            placeholder="Tìm kiếm..."
             class="searchInput"
         />
     </label>

@@ -1,5 +1,5 @@
 import { createStore } from 'vuex';
-import fetchFunc from './fetchFunc';
+import { fetchFunc, setStatus } from './utils';
 
 const API_KEY = 'f96bc754e888b05f53dd6db062184947';
 
@@ -10,6 +10,14 @@ export default createStore({
         entities: [],
         page: 1,
         endOfData: false,
+        favourite: {
+            ids: {},
+            list: [],
+        },
+        watchLater: {
+            ids: {},
+            list: [],
+        },
     },
     getters: {},
     mutations: {
@@ -32,6 +40,12 @@ export default createStore({
             state.entities = [];
             state.error = payload;
         },
+        handleFavourite(state, payload) {
+            setStatus({ state, payload, key: 'favourite' });
+        },
+        handleWatchLater(state, payload) {
+            setStatus({ state, payload, key: 'watchLater' });
+        },
     },
     actions: {
         async fetchDiscoverFilms({ state, commit }) {
@@ -42,6 +56,12 @@ export default createStore({
                 successFunc: 'setEntities',
                 errorFunc: 'setError',
             });
+        },
+        handleFavourite({ commit }, film) {
+            commit('handleFavourite', film);
+        },
+        handleWatchLater({ commit }, film) {
+            commit('handleWatchLater', film);
         },
     },
     modules: {},

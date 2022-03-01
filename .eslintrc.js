@@ -17,5 +17,8 @@ module.exports = {
         'no-unused-vars': 'warn',
         'comma-dangle': 'off',
         'object-curly-newline': 'off',
+        'no-confusing-arrow': 'off',
+        'implicit-arrow-linebreak': 'off',
+        'function-paren-newline': 'off',
     },
 };
