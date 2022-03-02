@@ -1,13 +1,38 @@
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, onUnmounted, ref, watch, onBeforeUpdate } from 'vue';
+import { useStore } from 'vuex';
 import Header from './components/HeaderComponent.vue';
-import store from './store';
+import { throttle } from './utils';
 
-onMounted(() => store.dispatch('fetchDiscoverFilms'));
+const store = useStore();
+const container = ref(null);
+const scroll = ref(null);
+
+const throttledFetch = throttle(() => store.dispatch('fetchMore'), 1000);
+const handleScroll = () => {
+    if (container.value.getBoundingClientRect().bottom < window.innerHeight) {
+        throttledFetch();
+        scroll.value = container.value.clientHeight;
+    }
+};
+
+watch([scroll, store.state.loading], () => {
+    if (!store.state.loading) {
+        window.scrollTo(0, scroll.value);
+    }
+});
+
+onBeforeUpdate(() => window.scrollTo(0, scroll.value));
+
+onMounted(() => {
+    store.dispatch('fetchDiscoverFilms');
+    window.addEventListener('scroll', handleScroll);
+});
+onUnmounted(() => window.removeEventListener('scroll', handleScroll));
 </script>
 
 <template>
-    <div class="container">
+    <div class="container" ref="container">
         <Header />
         <main><router-view /></main>
     </div>
@@ -42,9 +67,9 @@ body {
     max-width: $maxWidth;
     margin: auto;
     flex-direction: column;
-    width: 100vw;
-    height: 100vh;
-    padding: 3rem;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 2rem;
 }
 
 main {

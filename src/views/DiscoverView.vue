@@ -6,7 +6,7 @@ import FilmPreview from '../components/FilmPreview.vue';
 
 <template>
     <SearchLine />
-    <div class="filmsContainer">
+    <div class="filmsContainer" ref="filmContainer">
         <template v-if="!this.$store.state.loading">
             <FilmPreview v-for="film in this.$store.state.entities" :key="film.id" :film="film" />
         </template>
@@ -27,6 +27,7 @@ import FilmPreview from '../components/FilmPreview.vue';
     flex-wrap: wrap;
     gap: 1rem;
     justify-content: center;
+    margin-bottom: 2rem;
 }
 .fullPageSpinner {
     height: 100%;

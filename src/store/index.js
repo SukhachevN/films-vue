@@ -18,21 +18,30 @@ export default createStore({
             ids: {},
             list: [],
         },
+        lastLink: null,
+        type: null,
     },
     getters: {},
     mutations: {
         setLoadingEntities(state) {
             state.loading = true;
         },
-        setEntities(state, payload) {
-            if (payload.length < 20) {
+        setEntities(state, { result, type, link }) {
+            if (type !== state.type) {
+                state.page = 1;
+                state.entities = result;
+            } else {
+                state.entities = [...state.entities, ...result];
+            }
+            if (result.length < 20) {
                 state.endOfData = true;
             } else {
                 state.page += 1;
             }
-            state.entities = [...state.entities, ...payload];
             state.loading = false;
             state.error = false;
+            state.lastLink = link;
+            state.type = type;
         },
         setError(state, payload) {
             state.loading = false;
@@ -55,6 +64,27 @@ export default createStore({
                 loadingFunc: 'setLoadingEntities',
                 successFunc: 'setEntities',
                 errorFunc: 'setError',
+                type: 'discover',
+            });
+        },
+        async fetchSearchFilm({ state, commit }, film) {
+            fetchFunc({
+                commit,
+                link: `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${film}&page=${state.page}&language=vi-VN`,
+                loadingFunc: 'setLoadingEntities',
+                successFunc: 'setEntities',
+                errorFunc: 'setError',
+                type: 'search',
+            });
+        },
+        async fetchMore({ state, commit }) {
+            fetchFunc({
+                commit,
+                link: state.lastLink,
+                loadingFunc: 'setLoadingEntities',
+                successFunc: 'setEntities',
+                errorFunc: 'setError',
+                type: state.type,
             });
         },
         handleFavourite({ commit }, film) {

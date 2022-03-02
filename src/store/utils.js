@@ -1,11 +1,11 @@
 import camelcaseKeys from 'camelcase-keys';
 
-const fetchFunc = async ({ commit, link, loadingFunc, successFunc, errorFunc }) => {
+const fetchFunc = async ({ commit, link, loadingFunc, successFunc, errorFunc, type }) => {
     commit(loadingFunc);
     try {
         const response = await fetch(link);
         const result = await response.json();
-        commit(successFunc, camelcaseKeys(result.results));
+        commit(successFunc, { result: camelcaseKeys(result.results), type, link });
     } catch (error) {
         commit(errorFunc, error);
     }
