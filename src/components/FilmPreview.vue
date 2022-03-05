@@ -1,8 +1,10 @@
 <script setup>
-import { defineProps, ref, computed } from 'vue';
+import { defineProps, computed } from 'vue';
 import { useStore } from 'vuex';
 import CircleProgress from 'vue3-circle-progress';
-import icons from 'v-svg-icons';
+import placeholder from '../assets/img/imagePlaceholder.jpg';
+import HeartIcon from '../assets/icons/HeartIcon.vue';
+import ClockIcon from '../assets/icons/ClockIcon.vue';
 
 const props = defineProps(['film']);
 const store = useStore();
@@ -16,27 +18,32 @@ const clockColor = computed(() =>
     <div class="film">
         <router-link :to="`/films/${props.film.id}`">
             <img
-                :src="`https://image.tmdb.org/t/p/w300${props.film.posterPath}`"
+                :src="
+                    props.film.posterPath
+                        ? `https://image.tmdb.org/t/p/w300${props.film.posterPath}`
+                        : placeholder
+                "
                 :alt="props.film.title"
             />
             <h2>{{ props.film.title }}</h2>
-            <p>{{ props.film.overview }}</p>
+            <p>{{ props.film.overview || 'Khóng có mô tả' }}</p>
         </router-link>
         <div class="statusIndicators">
             <button class="indicator" @click="$store.dispatch('handleFavourite', film)">
-                <icons name="heart-fill" :color="heartColor" />
+                <HeartIcon :fill="heartColor" />
             </button>
             <CircleProgress
                 :percent="props.film.voteAverage * 10"
                 :show-percent="true"
-                :viewport="true"
+                :viewport="false"
                 :size="60"
+                :transition="0"
                 :border-width="5"
                 :border-bg-width="5"
                 fill-color="#3e98c7"
             />
             <button class="indicator" @click="$store.dispatch('handleWatchLater', film)">
-                <icons name="clock" :color="clockColor" />
+                <ClockIcon :fill="clockColor" />
             </button>
         </div>
     </div>
@@ -110,28 +117,11 @@ const clockColor = computed(() =>
         flex-basis: 20%;
     }
     img {
-        width: 100%;
-        max-width: 20rem;
-        height: 100%;
-        max-height: 20rem;
+        width: 200px;
+        height: 300px;
         padding-bottom: 2rem;
         margin: 0 auto;
         display: flex;
-        @media (max-width: $small) {
-            max-height: 19rem;
-            max-width: 14rem;
-        }
-        @media (min-width: $small) and (max-width: $medium) {
-            max-height: 23rem;
-            max-width: 14rem;
-        }
-        @media (min-width: $medium) and (max-width: $large) {
-            max-height: 23rem;
-            max-width: 15rem;
-        }
-        @media (min-width: $large) and (max-width: $extraLarge) {
-            max-width: 13rem;
-        }
     }
     h2,
     p {

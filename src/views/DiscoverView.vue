@@ -7,14 +7,16 @@ import FilmPreview from '../components/FilmPreview.vue';
 <template>
     <SearchLine />
     <div class="filmsContainer" ref="filmContainer">
-        <template v-if="!this.$store.state.loading">
-            <FilmPreview v-for="film in this.$store.state.entities" :key="film.id" :film="film" />
-        </template>
-        <template v-else
-            ><div class="fullPageSpinner">
-                <PulseLoader :loading="loading" color="#3f51b5" size="2.5rem" />
-            </div>
-        </template>
+        <FilmPreview v-for="film in $store.state.entities" :key="film.id" :film="film" />
+    </div>
+    <div
+        class="spinner spinner-fullPage"
+        v-if="$store.state.loadingEntities && $store.state.entities.length === 0"
+    >
+        <PulseLoader :loading="$store.state.loadingEntities" color="#3f51b5" size="2.5rem" />
+    </div>
+    <div class="spinner" v-else-if="$store.state.loadingEntities">
+        <PulseLoader :loading="$store.state.loadingEntities" color="#3f51b5" size="2.5rem" />
     </div>
 </template>
 
@@ -29,11 +31,11 @@ import FilmPreview from '../components/FilmPreview.vue';
     justify-content: center;
     margin-bottom: 2rem;
 }
-.fullPageSpinner {
-    height: 100%;
-    width: 100%;
+.spinner {
     display: flex;
-    justify-content: center;
     align-items: center;
+    &-fullPage {
+        height: 80vh;
+    }
 }
 </style>

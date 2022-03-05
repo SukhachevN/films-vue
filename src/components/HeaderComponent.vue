@@ -11,6 +11,7 @@
 <style lang="scss">
 @import '../constants.scss';
 .header {
+    height: 5rem;
     &__nav {
         display: flex;
         gap: 1rem;

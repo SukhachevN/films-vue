@@ -9,14 +9,17 @@ const container = ref(null);
 const scroll = ref(null);
 
 const throttledFetch = throttle(() => store.dispatch('fetchMore'), 1000);
+
 const handleScroll = () => {
-    if (container.value.getBoundingClientRect().bottom < window.innerHeight) {
+    const endCondition = container.value.getBoundingClientRect().bottom === window.innerHeight;
+
+    if (endCondition && !store.state.endOfData) {
         throttledFetch();
         scroll.value = container.value.clientHeight;
     }
 };
 
-watch([scroll, store.state.loading], () => {
+watch(scroll, () => {
     if (!store.state.loading) {
         window.scrollTo(0, scroll.value);
     }
@@ -60,6 +63,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
+
 .container {
     display: flex;
     align-items: center;
@@ -69,11 +73,12 @@ body {
     flex-direction: column;
     width: 100%;
     height: 100%;
-    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    overflow-x: hidden;
 }
 
 main {
-    height: 100%;
+    height: calc(100% - 5rem);
     width: 100%;
     display: flex;
     align-items: center;

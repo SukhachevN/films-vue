@@ -10,7 +10,6 @@
   "dependencies": {
     "camelcase-keys": "^7.0.2",
     "core-js": "^3.8.3",
-    "v-svg-icons": "^1.1.4",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
     "vue-spinner": "^1.0.4",

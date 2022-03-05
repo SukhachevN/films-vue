@@ -24,7 +24,7 @@ export default createStore({
     getters: {},
     mutations: {
         setLoadingEntities(state) {
-            state.loading = true;
+            state.loadingEntities = true;
         },
         setEntities(state, { result, type, link }) {
             if (type !== state.type) {
@@ -38,13 +38,13 @@ export default createStore({
             } else {
                 state.page += 1;
             }
-            state.loading = false;
+            state.loadingEntities = false;
             state.error = false;
             state.lastLink = link;
             state.type = type;
         },
-        setError(state, payload) {
-            state.loading = false;
+        setEntitiesError(state, payload) {
+            state.loadingEntities = false;
             state.page = 1;
             state.entities = [];
             state.error = payload;
@@ -60,21 +60,23 @@ export default createStore({
         async fetchDiscoverFilms({ state, commit }) {
             fetchFunc({
                 commit,
-                link: `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&sort_by=popularity.desc&page=${state.page}&language=vi-VN`,
+                link: `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&sort_by=popularity.desc&language=vi-VN`,
                 loadingFunc: 'setLoadingEntities',
                 successFunc: 'setEntities',
-                errorFunc: 'setError',
+                errorFunc: 'setEntitiesError',
                 type: 'discover',
+                page: state.type === 'disover' ? state.page : 1,
             });
         },
         async fetchSearchFilm({ state, commit }, film) {
             fetchFunc({
                 commit,
-                link: `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${film}&page=${state.page}&language=vi-VN`,
+                link: `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${film}&language=vi-VN`,
                 loadingFunc: 'setLoadingEntities',
                 successFunc: 'setEntities',
-                errorFunc: 'setError',
+                errorFunc: 'setEntitiesError',
                 type: 'search',
+                page: state.type === 'search' ? state.page : 1,
             });
         },
         async fetchMore({ state, commit }) {
@@ -85,6 +87,7 @@ export default createStore({
                 successFunc: 'setEntities',
                 errorFunc: 'setError',
                 type: state.type,
+                page: state.page,
             });
         },
         handleFavourite({ commit }, film) {
