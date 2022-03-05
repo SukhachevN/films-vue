@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 export function debounce(func, wait, immediate) {
     let timeout;
 
@@ -17,5 +16,16 @@ export function debounce(func, wait, immediate) {
         timeout = setTimeout(later, wait);
 
         if (callNow) func.apply(context, args);
+    };
+}
+
+export function throttle(func, timeFrame) {
+    let lastTime = 0;
+    return () => {
+        const now = new Date();
+        if (now - lastTime >= timeFrame) {
+            func();
+            lastTime = now;
+        }
     };
 }
