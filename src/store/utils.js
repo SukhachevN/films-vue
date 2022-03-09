@@ -6,12 +6,11 @@ const fetchFunc = async ({ commit, link, loadingFunc, successFunc, errorFunc, ty
         const fullLink = page ? `${link}&page=${page}` : link;
         const response = await fetch(fullLink);
         const result = await response.json();
-        console.log(result);
         const camelCasedResult = camelcaseKeys(result.results || result);
         if (camelCasedResult.statusCode) {
             commit(errorFunc, true);
         } else {
-            commit(successFunc, { result: camelcaseKeys(result.results || result), type, link });
+            commit(successFunc, { result: camelCasedResult, type, link });
         }
     } catch (error) {
         commit(errorFunc, error);

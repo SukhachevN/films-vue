@@ -36,53 +36,5 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll));
 </template>
 
 <style lang="scss">
-@import './constants.scss';
-
-* {
-    margin: 0;
-    box-sizing: border-box;
-    padding: 0;
-}
-li {
-    list-style: none;
-}
-a {
-    text-decoration: none;
-    color: inherit;
-    &:hover {
-        color: $blue;
-    }
-}
-body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
-        'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
-
-.container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-width: $maxWidth;
-    margin: auto;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    padding-bottom: 2rem;
-    overflow-x: hidden;
-}
-
-main {
-    height: calc(100% - 5rem);
-    width: 100%;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-
-.error {
-    color: $red;
-}
+@import './styles.scss';
 </style>

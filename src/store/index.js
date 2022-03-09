@@ -46,6 +46,12 @@ export default createStore({
                 loadingVideo,
             };
         },
+        getFavourite(state) {
+            return state.favourite.list;
+        },
+        getWatchLater(state) {
+            return state.watchLater.list;
+        },
         isInFavourite: (state) => (id) => Boolean(state.favourite.ids[id]),
         isInWatchLater: (state) => (id) => Boolean(state.watchLater.ids[id]),
     },

@@ -28,6 +28,3 @@ const isInFavourite = computed(() => store.getters.isInWatchLater(props.film.id)
         </svg>
     </button>
 </template>
-<style lang="scss">
-@import './styles.scss';
-</style>
