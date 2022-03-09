@@ -1,17 +1,11 @@
 <script setup>
-import { defineProps, computed } from 'vue';
-import { useStore } from 'vuex';
+import { defineProps } from 'vue';
 import CircleProgress from 'vue3-circle-progress';
 import placeholder from '../assets/img/imagePlaceholder.jpg';
-import HeartIcon from '../assets/icons/HeartIcon.vue';
-import ClockIcon from '../assets/icons/ClockIcon.vue';
+import ToFavourite from './buttons/ToFavourite.vue';
+import ToWatchLater from './buttons/ToWatchLater.vue';
 
 const props = defineProps(['film']);
-const store = useStore();
-const heartColor = computed(() => (store.state.favourite.ids[props.film.id] ? 'red' : '#6f7077'));
-const clockColor = computed(() =>
-    store.state.watchLater.ids[props.film.id] ? 'green' : '#6f7077'
-);
 </script>
 
 <template>
@@ -29,9 +23,7 @@ const clockColor = computed(() =>
             <p>{{ props.film.overview || 'Khóng có mô tả' }}</p>
         </router-link>
         <div class="statusIndicators">
-            <button class="indicator" @click="$store.dispatch('handleFavourite', film)">
-                <HeartIcon :fill="heartColor" />
-            </button>
+            <ToFavourite :film="film" />
             <CircleProgress
                 :percent="props.film.voteAverage * 10"
                 :show-percent="true"
@@ -42,9 +34,7 @@ const clockColor = computed(() =>
                 :border-bg-width="5"
                 fill-color="#3e98c7"
             />
-            <button class="indicator" @click="$store.dispatch('handleWatchLater', film)">
-                <ClockIcon :fill="clockColor" />
-            </button>
+            <ToWatchLater :film="film" />
         </div>
     </div>
 </template>
@@ -69,27 +59,6 @@ const clockColor = computed(() =>
         padding: 1rem 0;
         color: $progressBlue !important;
         gap: 1.2rem;
-        .indicator {
-            cursor: pointer;
-            background: transparent;
-            border: none;
-            .heart-fill,
-            .clock {
-                color: $iconGray;
-                width: 2.5rem;
-                height: 2.5rem;
-            }
-        }
-        .clock-active {
-            .clock {
-                color: $green;
-            }
-        }
-        .heart-active {
-            .heart-fill {
-                $color: $red;
-            }
-        }
     }
     &:hover {
         transform: scale(1.01);

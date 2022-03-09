@@ -6,8 +6,14 @@ const API_KEY = 'f96bc754e888b05f53dd6db062184947';
 export default createStore({
     state: {
         loadingEntities: false,
-        error: null,
+        loadingEntity: false,
+        loadingVideo: false,
+        errorEntities: null,
+        errorEntity: null,
+        errorVideo: null,
+        entity: null,
         entities: [],
+        video: null,
         page: 1,
         endOfData: false,
         favourite: {
@@ -21,7 +27,28 @@ export default createStore({
         lastLink: null,
         type: null,
     },
-    getters: {},
+    getters: {
+        getEntities(state) {
+            const { loadingEntities, errorEntities, entities } = state;
+            return {
+                loadingEntities,
+                errorEntities,
+                entities,
+            };
+        },
+        getEntity(state) {
+            const { loadingEntity, errorEntity, entity, video, loadingVideo } = state;
+            return {
+                loadingEntity,
+                errorEntity,
+                entity,
+                video,
+                loadingVideo,
+            };
+        },
+        isInFavourite: (state) => (id) => Boolean(state.favourite.ids[id]),
+        isInWatchLater: (state) => (id) => Boolean(state.watchLater.ids[id]),
+    },
     mutations: {
         setLoadingEntities(state) {
             state.loadingEntities = true;
@@ -39,21 +66,54 @@ export default createStore({
                 state.page += 1;
             }
             state.loadingEntities = false;
-            state.error = false;
+            state.errorEntities = false;
             state.lastLink = link;
             state.type = type;
         },
-        setEntitiesError(state, payload) {
+        setEntitiesError(state, error) {
             state.loadingEntities = false;
             state.page = 1;
             state.entities = [];
-            state.error = payload;
+            state.errorEntities = error;
+        },
+        setLoadingEntity(state) {
+            state.loadingEntity = true;
+        },
+        setEntity(state, { result }) {
+            state.entity = result;
+            state.loadingEntity = false;
+            state.errorEntity = null;
+        },
+        setEntityError(state, error) {
+            state.loadingEntity = false;
+            state.entity = null;
+            state.errorEntity = error;
+        },
+        setLoadingVideo(state) {
+            state.loadingVideo = true;
+        },
+        setVideo(state, { result }) {
+            const youteubeVideo = result?.find(({ site }) => site === 'YouTube');
+            state.video = youteubeVideo
+                ? `https://www.youtube.com/watch?v=${youteubeVideo.key}`
+                : null;
+            state.loadingVideo = null;
+            state.errorVideo = null;
+        },
+        setVideoError(state, error) {
+            state.video = null;
+            state.loadingVideo = false;
+            state.errorVideo = error;
         },
         handleFavourite(state, payload) {
             setStatus({ state, payload, key: 'favourite' });
         },
         handleWatchLater(state, payload) {
             setStatus({ state, payload, key: 'watchLater' });
+        },
+        handleResetEntity(state) {
+            state.entity = null;
+            state.video = null;
         },
     },
     actions: {
@@ -90,11 +150,32 @@ export default createStore({
                 page: state.page,
             });
         },
+        async fetchEntity({ commit }, id) {
+            fetchFunc({
+                commit,
+                link: `https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}&language=vi-VN`,
+                loadingFunc: 'setLoadingEntity',
+                successFunc: 'setEntity',
+                errorFunc: 'setEntityError',
+            });
+        },
+        async fetchEntityVideo({ commit }, id) {
+            fetchFunc({
+                commit,
+                link: `https://api.themoviedb.org/3/movie/${id}/videos?api_key=${API_KEY}`,
+                loadingFunc: 'setLoadingVideo',
+                successFunc: 'setVideo',
+                errorFunc: 'setVideoError',
+            });
+        },
         handleFavourite({ commit }, film) {
             commit('handleFavourite', film);
         },
         handleWatchLater({ commit }, film) {
             commit('handleWatchLater', film);
+        },
+        handleResetEntity({ commit }) {
+            commit('handleResetEntity');
         },
     },
     modules: {},

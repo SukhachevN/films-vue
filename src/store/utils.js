@@ -3,9 +3,16 @@ import camelcaseKeys from 'camelcase-keys';
 const fetchFunc = async ({ commit, link, loadingFunc, successFunc, errorFunc, type, page }) => {
     commit(loadingFunc);
     try {
-        const response = await fetch(`${link}&page=${page}`);
+        const fullLink = page ? `${link}&page=${page}` : link;
+        const response = await fetch(fullLink);
         const result = await response.json();
-        commit(successFunc, { result: camelcaseKeys(result.results), type, link });
+        console.log(result);
+        const camelCasedResult = camelcaseKeys(result.results || result);
+        if (camelCasedResult.statusCode) {
+            commit(errorFunc, true);
+        } else {
+            commit(successFunc, { result: camelcaseKeys(result.results || result), type, link });
+        }
     } catch (error) {
         commit(errorFunc, error);
     }
