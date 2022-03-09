@@ -1,12 +1,13 @@
 <script setup>
-import { onMounted, onUnmounted, ref, watch, onBeforeUpdate } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 import { useStore } from 'vuex';
 import Header from './components/HeaderComponent.vue';
 import { throttle } from './utils';
 
 const store = useStore();
+const route = useRoute();
 const container = ref(null);
-const scroll = ref(null);
 
 const throttledFetch = throttle(() => store.dispatch('fetchMore'), 1000);
 
@@ -15,21 +16,14 @@ const handleScroll = () => {
 
     if (endCondition && !store.state.endOfData) {
         throttledFetch();
-        scroll.value = container.value.clientHeight;
     }
 };
 
-watch(scroll, () => {
-    if (!store.state.loading) {
-        window.scrollTo(0, scroll.value);
-    }
-});
-
-onBeforeUpdate(() => window.scrollTo(0, scroll.value));
-
 onMounted(() => {
-    store.dispatch('fetchDiscoverFilms');
     window.addEventListener('scroll', handleScroll);
+    if (['/', '/discover'].includes(route.path)) {
+        store.dispatch('fetchDiscoverFilms');
+    }
 });
 onUnmounted(() => window.removeEventListener('scroll', handleScroll));
 </script>
@@ -55,6 +49,9 @@ li {
 a {
     text-decoration: none;
     color: inherit;
+    &:hover {
+        color: $blue;
+    }
 }
 body {
     margin: 0;
@@ -83,5 +80,9 @@ main {
     display: flex;
     align-items: center;
     flex-direction: column;
+}
+
+.error {
+    color: $red;
 }
 </style>
