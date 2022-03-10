@@ -9,12 +9,20 @@ const store = useStore();
 const films = computed(() => store.getters.getEntities);
 const entities = computed(() => films.value.entities);
 const loading = computed(() => films.value.loadingEntities);
+const error = computed(() => films.value.errorEntities);
 </script>
 
 <template>
     <SearchLine />
-    <div class="filmsContainer" ref="filmContainer">
-        <FilmPreview v-for="film in entities" :key="film.id" :film="film" />
+    <div class="filmsContainer" role="list">
+        <template v-if="entities.length && !error">
+            <FilmPreview v-for="film in entities" :key="film.id" :film="film" />
+        </template>
+        <template v-else-if="error">
+            <div class="errorBlock" role="alert">
+                <p class="error">Xin lỗi, không thể tìm kiếm phim nào với tên này</p>
+            </div>
+        </template>
     </div>
     <div class="spinner spinner-fullPage" v-if="loading && entities.length === 0">
         <PulseLoader :loading="loading" color="#3f51b5" size="2.5rem" />
@@ -23,23 +31,3 @@ const loading = computed(() => films.value.loadingEntities);
         <PulseLoader :loading="loading" color="#3f51b5" size="2.5rem" />
     </div>
 </template>
-
-<style lang="scss">
-.filmsContainer {
-    width: 100%;
-    height: 100%;
-    padding-top: 2rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    justify-content: center;
-    margin-bottom: 2rem;
-}
-.spinner {
-    display: flex;
-    align-items: center;
-    &-fullPage {
-        height: 80vh;
-    }
-}
-</style>

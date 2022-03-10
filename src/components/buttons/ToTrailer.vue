@@ -35,6 +35,3 @@ const props = defineProps(['videoKey']);
         </a>
     </button>
 </template>
-<style lang="scss">
-@import './styles.scss';
-</style>

@@ -1,3 +1,4 @@
+import { favouriteKey, watchLaterKey } from '@/utils';
 import camelcaseKeys from 'camelcase-keys';
 
 const fetchFunc = async ({ commit, link, loadingFunc, successFunc, errorFunc, type, page }) => {
@@ -6,12 +7,11 @@ const fetchFunc = async ({ commit, link, loadingFunc, successFunc, errorFunc, ty
         const fullLink = page ? `${link}&page=${page}` : link;
         const response = await fetch(fullLink);
         const result = await response.json();
-        console.log(result);
         const camelCasedResult = camelcaseKeys(result.results || result);
-        if (camelCasedResult.statusCode) {
+        if (camelCasedResult.statusCode || camelCasedResult.totalPages === 0) {
             commit(errorFunc, true);
         } else {
-            commit(successFunc, { result: camelcaseKeys(result.results || result), type, link });
+            commit(successFunc, { result: camelCasedResult, type, link });
         }
     } catch (error) {
         commit(errorFunc, error);
@@ -26,6 +26,9 @@ const setStatus = ({ state, payload, key }) => {
         state[key].ids[payload.id] = true;
         state[key].list = [...state[key].list, payload];
     }
+    const localStorageKey = key === 'favourite' ? favouriteKey : watchLaterKey;
+    const stringifiedValue = JSON.stringify(state[key]);
+    localStorage.setItem(localStorageKey, stringifiedValue);
 };
 
 export { fetchFunc, setStatus };

@@ -29,22 +29,3 @@ watch(search, () => {
         />
     </label>
 </template>
-
-<style lang="scss" scoped>
-@import '../constants.scss';
-label {
-    width: 90%;
-}
-.searchInput {
-    border: 1px solid $lightGray;
-    background: $lightBlue;
-    height: 2.75rem;
-    font-size: 1.1rem;
-    border-radius: 0.3rem;
-    width: 100%;
-    padding: 0.5rem 0.8rem;
-    &:focus-visible {
-        outline: 1px solid $blue;
-    }
-}
-</style>

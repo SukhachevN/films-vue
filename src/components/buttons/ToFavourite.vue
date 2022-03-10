@@ -7,7 +7,11 @@ const store = useStore();
 const isInFavourite = computed(() => store.getters.isInFavourite(props.film.id));
 </script>
 <template>
-    <button class="actionButton" @click="store.dispatch('handleFavourite', props.film)">
+    <button
+        class="actionButton"
+        @click="store.dispatch('handleFavourite', props.film)"
+        :aria-label="isInFavourite ? 'xóa bỏ từ yêu thích' : 'thêm trong yêu thích'"
+    >
         <svg
             stroke="currentColor"
             :fill="isInFavourite ? 'red' : '#6f7077'"
@@ -27,6 +31,3 @@ const isInFavourite = computed(() => store.getters.isInFavourite(props.film.id))
         </svg>
     </button>
 </template>
-<style lang="scss">
-@import './styles.scss';
-</style>
