@@ -1,10 +1,10 @@
 import { createStore } from 'vuex';
+import { API_KEY, favouriteKey, watchLaterKey } from '@/utils';
 import { fetchFunc, setStatus } from './utils';
-
-const API_KEY = 'f96bc754e888b05f53dd6db062184947';
 
 export default createStore({
     state: {
+        initialized: false,
         loadingEntities: false,
         loadingEntity: false,
         loadingVideo: false,
@@ -51,6 +51,9 @@ export default createStore({
         },
         getWatchLater(state) {
             return state.watchLater.list;
+        },
+        getInitialized(state) {
+            return state.initialized;
         },
         isInFavourite: (state) => (id) => Boolean(state.favourite.ids[id]),
         isInWatchLater: (state) => (id) => Boolean(state.watchLater.ids[id]),
@@ -110,6 +113,19 @@ export default createStore({
             state.video = null;
             state.loadingVideo = false;
             state.errorVideo = error;
+        },
+        initialize(state) {
+            const emptyObj = {
+                ids: {},
+                list: [],
+            };
+            const unparsedFavourite = localStorage.getItem(favouriteKey);
+            const unparsedWatchLater = localStorage.getItem(watchLaterKey);
+            const favourite = JSON.parse(unparsedFavourite) || emptyObj;
+            const watchLater = JSON.parse(unparsedWatchLater) || emptyObj;
+            state.favourite = favourite;
+            state.watchLater = watchLater;
+            state.initialized = true;
         },
         handleFavourite(state, payload) {
             setStatus({ state, payload, key: 'favourite' });
@@ -173,6 +189,9 @@ export default createStore({
                 successFunc: 'setVideo',
                 errorFunc: 'setVideoError',
             });
+        },
+        initialize({ commit }) {
+            commit('initialize');
         },
         handleFavourite({ commit }, film) {
             commit('handleFavourite', film);

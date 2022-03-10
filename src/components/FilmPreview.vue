@@ -9,7 +9,7 @@ const props = defineProps(['film']);
 </script>
 
 <template>
-    <div class="film">
+    <div class="film" role="listitem">
         <router-link :to="`/films/${props.film.id}`">
             <img
                 :src="
@@ -27,9 +27,9 @@ const props = defineProps(['film']);
             <CircleProgress
                 :percent="props.film.voteAverage * 10"
                 :show-percent="true"
-                :viewport="false"
+                :viewport="true"
                 :size="60"
-                :transition="0"
+                :transition="2000"
                 :border-width="5"
                 :border-bg-width="5"
                 fill-color="#3e98c7"

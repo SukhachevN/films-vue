@@ -29,3 +29,7 @@ export function throttle(func, timeFrame) {
         }
     };
 }
+
+export const favouriteKey = 'myFavouriteFilms';
+export const watchLaterKey = 'myWatchLaterFilms';
+export const API_KEY = 'f96bc754e888b05f53dd6db062184947';

@@ -4,13 +4,17 @@ import { useStore } from 'vuex';
 
 const props = defineProps(['film']);
 const store = useStore();
-const isInFavourite = computed(() => store.getters.isInWatchLater(props.film.id));
+const isInWatchLater = computed(() => store.getters.isInWatchLater(props.film.id));
 </script>
 <template>
-    <button class="actionButton" @click="store.dispatch('handleWatchLater', props.film)">
+    <button
+        class="actionButton"
+        @click="store.dispatch('handleWatchLater', props.film)"
+        :aria-label="isInWatchLater ? 'xóa bỏ từ xem sau' : 'thêm trong xem sau'"
+    >
         <svg
             stroke="currentColor"
-            :fill="isInFavourite ? 'green' : '#6f7077'"
+            :fill="isInWatchLater ? 'green' : '#6f7077'"
             stroke-width="0"
             viewBox="0 0 16 16"
             color="#6f7077"

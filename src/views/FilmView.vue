@@ -66,9 +66,9 @@ const imgSrc = computed(() =>
                     <CircleProgress
                         :percent="entity.voteAverage * 10"
                         :show-percent="true"
-                        :viewport="false"
+                        :viewport="true"
                         :size="90"
-                        :transition="0"
+                        :transition="2000"
                         :border-width="7"
                         :border-bg-width="7"
                         fill-color="#3e98c7"
@@ -80,7 +80,7 @@ const imgSrc = computed(() =>
     <div class="spinner spinner-fullPage" v-else-if="loadingEntity || loadingVideo">
         <PulseLoader :loading="loadingEntity || loadingVideo" color="#3f51b5" size="2.5rem" />
     </div>
-    <div class="errorBlock" v-else-if="error">
+    <div class="errorBlock" v-else-if="error" role="alert">
         <p class="error">Xin lỗi, không thể tìm kiểm phim với id {{ id }}</p>
         <router-link to="/discover">Quay lại</router-link>
     </div>
