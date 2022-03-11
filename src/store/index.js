@@ -55,8 +55,11 @@ export default createStore({
         getInitialized(state) {
             return state.initialized;
         },
-        isInFavourite: (state) => (id) => Boolean(state.favourite.ids[id]),
-        isInWatchLater: (state) => (id) => Boolean(state.watchLater.ids[id]),
+        getEndOfData(state) {
+            return state.endOfData;
+        },
+        isInFavourite: (state) => (id) => state.favourite.ids[id],
+        isInWatchLater: (state) => (id) => state.watchLater.ids[id],
     },
     mutations: {
         setLoadingEntities(state) {
@@ -115,14 +118,10 @@ export default createStore({
             state.errorVideo = error;
         },
         initialize(state) {
-            const emptyObj = {
-                ids: {},
-                list: [],
-            };
             const unparsedFavourite = localStorage.getItem(favouriteKey);
             const unparsedWatchLater = localStorage.getItem(watchLaterKey);
-            const favourite = JSON.parse(unparsedFavourite) || emptyObj;
-            const watchLater = JSON.parse(unparsedWatchLater) || emptyObj;
+            const favourite = JSON.parse(unparsedFavourite) || state.favourite;
+            const watchLater = JSON.parse(unparsedWatchLater) || state.watchLater;
             state.favourite = favourite;
             state.watchLater = watchLater;
             state.initialized = true;

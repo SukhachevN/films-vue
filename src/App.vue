@@ -10,13 +10,14 @@ const store = useStore();
 const route = useRoute();
 const container = ref(null);
 const initialized = computed(() => store.getters.getInitialized);
+const endOfData = computed(() => store.getters.getEndOfData);
 
 const throttledFetch = throttle(() => store.dispatch('fetchMore'), 1000);
 
 const handleScroll = () => {
     const endCondition = container.value.getBoundingClientRect().bottom === window.innerHeight;
 
-    if (endCondition && !store.state.endOfData) {
+    if (endCondition && endOfData) {
         throttledFetch();
     }
 };
